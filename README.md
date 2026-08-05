@@ -2,6 +2,12 @@
 
 离线比较两组文本文件中的连续完全相同片段，适用于标书、报告、合同、论文及其他长文本审核。最小片段长度由使用者设置，程序前端和匹配引擎都会强制限制为不少于 6 个字符。
 
+## 下载
+
+不想和 Node.js、Electron 打交道？直接前往 [Releases](https://github.com/arron-oss/Text_Duplicate_Finder/releases/latest) 下载 Windows 安装版或便携版，把两组文档丢进去，让重复片段自己站出来。
+
+本项目是个人维护的小工具，文件全程留在本机，不上传、不排队，也不偷偷围观你的文档。
+
 ## 支持范围
 
 - Word `.doc`、`.docx`

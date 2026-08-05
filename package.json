@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Offline exact duplicate-fragment finder for long text documents",
   "main": "src/main.js",
-  "author": "Bid Text Auditor contributors",
+  "author": "arron-oss and contributors",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
@@ -43,10 +43,14 @@
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "nsis": {
+      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}-${arch}.${ext}"
     }
   }
 }
