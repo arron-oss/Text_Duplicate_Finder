@@ -1,0 +1,52 @@
+{
+  "name": "text-duplicate-finder",
+  "version": "0.1.0",
+  "description": "Offline exact duplicate-fragment finder for long text documents",
+  "main": "src/main.js",
+  "author": "Bid Text Auditor contributors",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "test": "node --test",
+    "pack": "electron-builder --dir",
+    "pack:local": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-unpacked.ps1",
+    "dist": "electron-builder --win nsis portable"
+  },
+  "dependencies": {
+    "lucide": "1.28.0",
+    "mammoth": "1.12.0",
+    "word-extractor": "1.0.4"
+  },
+  "devDependencies": {
+    "electron": "43.3.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.textduplicate.finder",
+    "productName": "Text Duplicate Finder",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "README.md",
+      "LICENSE"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

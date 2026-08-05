@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文本重复片段检索</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-block">
+      <div>
+        <h1>文本重复片段检索</h1>
+        <p>连续相同文本精确检索</p>
+      </div>
+    </div>
+    <div class="privacy-note"><span data-icon="ShieldCheck"></span>文件仅在本机处理</div>
+  </header>
+
+  <main>
+    <section class="control-band" aria-label="比对设置">
+      <div class="control-title"><span data-icon="Settings2"></span><strong>匹配设置</strong></div>
+      <label class="number-control">
+        <span>最小片段</span>
+        <input id="minLength" type="number" min="6" step="1" value="6">
+        <span>字</span>
+      </label>
+      <label class="switch-control"><input id="ignoreWhitespace" type="checkbox" checked><span></span>忽略空白</label>
+      <label class="switch-control"><input id="ignorePunctuation" type="checkbox"><span></span>忽略标点</label>
+      <label class="switch-control"><input id="excludeHeadings" type="checkbox"><span></span>排除章节标题</label>
+      <button id="exclusionToggle" class="text-button" type="button"><span data-icon="ListFilter"></span>排除词条</button>
+      <div class="run-actions">
+        <button id="cancelButton" class="secondary-button hidden" type="button"><span data-icon="Square"></span>停止</button>
+        <button id="runButton" class="primary-button" type="button" disabled><span data-icon="Play"></span>开始比对</button>
+      </div>
+    </section>
+
+    <section id="exclusionPanel" class="exclusion-band hidden">
+      <label for="exclusionTerms">排除词条，每行一项</label>
+      <textarea id="exclusionTerms" rows="3" placeholder="例如：完整项目名称"></textarea>
+    </section>
+
+    <section class="source-grid" aria-label="待比较文本文件">
+      <article class="source-pane" data-side="left">
+        <div class="pane-header">
+          <div><span class="side-label">A</span><strong>第一组文本</strong><small id="leftCount">0 个文件</small></div>
+          <div class="pane-actions">
+            <button class="icon-text-button" data-action="add-files" title="添加文件" type="button"><span data-icon="FilePlus2"></span>文件</button>
+            <button class="icon-text-button" data-action="add-folder" title="添加文件夹" type="button"><span data-icon="FolderPlus"></span>文件夹</button>
+            <button class="icon-button" data-action="clear" title="清空" type="button"><span data-icon="Trash2"></span></button>
+          </div>
+        </div>
+        <div id="leftDropzone" class="file-list dropzone"><div class="empty-state"><span data-icon="Files"></span><strong>尚未添加文件</strong></div></div>
+      </article>
+
+      <article class="source-pane" data-side="right">
+        <div class="pane-header">
+          <div><span class="side-label side-label-right">B</span><strong>第二组文本</strong><small id="rightCount">0 个文件</small></div>
+          <div class="pane-actions">
+            <button class="icon-text-button" data-action="add-files" title="添加文件" type="button"><span data-icon="FilePlus2"></span>文件</button>
+            <button class="icon-text-button" data-action="add-folder" title="添加文件夹" type="button"><span data-icon="FolderPlus"></span>文件夹</button>
+            <button class="icon-button" data-action="clear" title="清空" type="button"><span data-icon="Trash2"></span></button>
+          </div>
+        </div>
+        <div id="rightDropzone" class="file-list dropzone"><div class="empty-state"><span data-icon="Files"></span><strong>尚未添加文件</strong></div></div>
+      </article>
+    </section>
+
+    <section id="progressBand" class="progress-band hidden" aria-live="polite">
+      <div><strong id="progressStage">正在准备</strong><span id="progressPercent">0%</span></div>
+      <div class="progress-track"><div id="progressFill"></div></div>
+    </section>
+
+    <section id="results" class="results hidden">
+      <div class="results-header">
+        <div><h2>核验结果</h2><p id="resultMeta"></p></div>
+        <div class="export-actions">
+          <button class="icon-text-button" data-export="csv" type="button"><span data-icon="Download"></span>CSV</button>
+          <button class="icon-text-button" data-export="json" type="button"><span data-icon="Download"></span>JSON</button>
+          <button class="icon-text-button" data-export="html" type="button"><span data-icon="Download"></span>HTML</button>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric"><span>A侧覆盖率</span><strong id="leftRate">0.00%</strong><small id="leftCoverage"></small></div>
+        <div class="metric metric-right"><span>B侧覆盖率</span><strong id="rightRate">0.00%</strong><small id="rightCoverage"></small></div>
+        <div class="metric metric-neutral"><span>独立匹配文本</span><strong id="matchCount">0</strong><small id="thresholdLabel"></small></div>
+      </div>
+
+      <div class="result-tabs" role="tablist">
+        <button class="tab active" data-tab="matches" type="button">匹配文本</button>
+        <button class="tab" data-tab="files" type="button">文件统计</button>
+        <button class="tab" data-tab="method" type="button">核验口径</button>
+      </div>
+
+      <div id="matchesPanel" class="tab-panel">
+        <div class="match-toolbar">
+          <label class="search-control"><span data-icon="Search"></span><input id="matchSearch" type="search" placeholder="搜索匹配文本或文件名"></label>
+          <span id="matchVisibleCount"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="match-table">
+            <thead><tr><th>长度</th><th>完全相同文本</th><th>A侧位置</th><th>B侧位置</th><th>出现组合</th></tr></thead>
+            <tbody id="matchRows"></tbody>
+          </table>
+        </div>
+        <button id="loadMore" class="load-more hidden" type="button">显示更多</button>
+      </div>
+
+      <div id="filesPanel" class="tab-panel hidden"><div id="fileStats" class="file-stats"></div></div>
+      <div id="methodPanel" class="tab-panel hidden">
+        <div class="method-layout">
+          <div><strong>匹配单位</strong><p>在同一段落内寻找连续完全相同文本，不跨段拼接。</p></div>
+          <div><strong>覆盖率</strong><p>将所有命中区间合并后计算，每个字符最多计一次。</p></div>
+          <div><strong>字面匹配</strong><p>候选文本按连续字符精确核验，标点不会被解释为正则操作符。</p></div>
+          <div><strong>数据范围</strong><p>读取正文及可提取的表格文字，不对图片进行OCR。</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
