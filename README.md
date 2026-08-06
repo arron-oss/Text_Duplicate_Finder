@@ -4,7 +4,9 @@
 
 ## 下载
 
-不想和 Node.js、Electron 打交道？直接前往 [Releases](https://github.com/arron-oss/Text_Duplicate_Finder/releases/latest) 下载 Windows 安装版或便携版，把两组文档丢进去，让重复片段自己站出来。
+不想和 Node.js、Electron 打交道？直接前往 [Releases](https://github.com/arron-oss/Text_Duplicate_Finder/releases/latest)。普通用户请下载并运行 `Text-Duplicate-Finder-Setup-0.1.0-x64.exe`，这是带安装向导的 Windows 安装版。
+
+不想安装时，再下载 `Text-Duplicate-Finder-Portable-0.1.0-x64.zip`，解压后运行其中的 `Text Duplicate Finder.exe`。`SHA256SUMS.txt` 只是校验文件，不是程序。
 
 本项目是个人维护的小工具，文件全程留在本机，不上传、不排队，也不偷偷围观你的文档。
 
